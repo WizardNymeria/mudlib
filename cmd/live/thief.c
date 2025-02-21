@@ -1065,6 +1065,8 @@ steal(string str)
     /* We're stealing, apply cost */
     this_player()->add_mana(-F_STEAL_MANA);
     this_player()->add_fatigue(-F_STEAL_FATIGUE);
+	/* Stealing gives us adrenaline */
+	this_player()->update_combat_time();
 
     /* Setup the thieves base chances.. */
     tmp  = this_player()->query_skill(SS_SNEAK);
