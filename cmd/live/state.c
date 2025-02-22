@@ -422,8 +422,8 @@ adverbs(string str)
 void
 compare_living(object living1, object living2)
 {
-    /* Allow the player high precision up to 3x their skill vs stat average */
-    int skill = this_player()->query_skill(SS_APPR_MON) * 3;
+    /* Allow the player high precision up to 4x their skill vs stat average */
+    int skill = this_player()->query_skill(SS_APPR_MON) * 4;
     int seed  = atoi(OB_NUM(living1)) + atoi(OB_NUM(living2));
     int index = -1;
     int stat1;
