@@ -202,19 +202,23 @@
     "degraded", "somewhat degraded", "slightly degraded", "in full vigour" })
 
 #define SD_COMPARE_STR  ({ "about the same strength as", 		  \
-			   "a bit stronger than", "stronger than", 	  \
-			   "much stronger than"})
+			   "barely stronger than", "somewhat stronger than",  "stronger than", 	  \
+			   "clearly stronger than", "much stronger than"})
 #define SD_COMPARE_DEX  ({ "about as agile as", 			  \
-			   "a bit better coordinated than", 		  \
-			   "more agile than", "much more agile than" })
-#define SD_COMPARE_CON  ({ "about as healthy as", "a bit healthier than", \
-			   "healthier than", "much healthier than"})
-#define SD_COMPARE_INT  ({ "about as smart as", "a bit smarter than",     \
-			   "smarter than", "much smarter than"})
-#define SD_COMPARE_WIS  ({ "about as wise as", "a bit wiser than",        \
-			   "wiser than", "much wiser than"})
-#define SD_COMPARE_DIS  ({ "about as brave as", "a bit braver than",      \
-			   "braver than", "much braver than"})
+			   "barely better coordinated than", "somewhat more agile than",	  \
+			   "more agile than", "clearly more agile", "much more agile than" })
+#define SD_COMPARE_CON  ({ "about as healthy as", "barely healthier than", \
+			   "somewhat healthier than", "healthier than", "clearly healthier than", \
+               "much healthier than"})
+#define SD_COMPARE_INT  ({ "about as smart as", "barely smarter than",     \
+			   "somewhat smarter than", "smarter than", \
+               "clearly smarter than", "much smarter than"})
+#define SD_COMPARE_WIS  ({ "about as wise as", "barely wiser than",        \
+			   "somewhat wiser than", "wiser than", \
+               "clearly wiser than", "much wiser than"})
+#define SD_COMPARE_DIS  ({ "about as brave as", "barely braver than",      \
+			   "somewhat braver than", "braver than", \
+               "clearly braver than", "much braver than"})
 #define SD_COMPARE_AC   ({ "about the same protection as",                \
                            "a bit more protection than",                  \
                            "more protection than",                        \
