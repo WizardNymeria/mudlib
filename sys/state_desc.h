@@ -206,7 +206,7 @@
 			   "clearly stronger than", "much stronger than"})
 #define SD_COMPARE_DEX  ({ "about as agile as", 			  \
 			   "barely better coordinated than", "somewhat more agile than",	  \
-			   "more agile than", "clearly more agile", "much more agile than" })
+			   "more agile than", "clearly more agile than", "much more agile than" })
 #define SD_COMPARE_CON  ({ "about as healthy as", "barely healthier than", \
 			   "somewhat healthier than", "healthier than", "clearly healthier than", \
                "much healthier than"})
