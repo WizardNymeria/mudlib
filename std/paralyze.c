@@ -7,17 +7,20 @@ inherit "/std/object";
 
 #include <cmdparse.h>
 #include <stdproperties.h>
+#include <macros.h>
 
 /*
  * Variables
  */
-static string	stop_verb,	/* What verb to stop this paralyze ? */
-		stop_fun;	/* What function to call when stopped */
-static mixed	fail_message,   /* Message to write when command failed */
-		stop_message;	/* Message to write when paralyze stopped */
-static int	remove_time,	/* Shall it go away automatically? */
-                combat_stop;    /* If true, stop when we're attacked. */
-static object	stop_object;	/* Object to call stop_fun in when stopped */
+static string  stop_verb,	  /* What verb to stop this paralyze ? */
+		       stop_fun;	  /* What function to call when stopped */
+static mixed   fail_message,  /* Message to write when command failed */
+		       stop_message,  /* Message to write when paralyze stopped */
+		       extra_commands;/* Extra commands this paralyze allows */
+static int	   remove_time,	  /* Shall it go away automatically? */
+               combat_stop,   /* If true, stop when we're attacked. */
+		       talkable;      /* Can player talk during this paralyze */
+static object  stop_object;   /* Object to call stop_fun in when stopped */
 
 /*
  * Prototypes
@@ -80,6 +83,8 @@ init()
 int
 stop(string str)
 {
+	string verb = query_verb();
+	
     /* Only paralyze our environment */
     if (environment() != this_player())
     {
@@ -87,14 +92,26 @@ stop(string str)
     }
 
     /* Some commands may always be issued. */
-    if (CMDPARSE_PARALYZE_CMD_IS_ALLOWED(query_verb()))
+    if (CMDPARSE_PARALYZE_CMD_IS_ALLOWED(verb))
     {
         return 0;
     }
-
+	
+	/* Special allowed commands for this specific paralyze */
+	if (extra_commands && IN_ARRAY(verb, extra_commands))
+	{
+		return 0;
+	}
+	
+	/* Check if the first character of the string is a ' for talkable 
+	   paralyzes*/
+    if (talkable && verb[0..0] == "'")
+    {
+        return 0; 
+    }
+	
     /* If there is a verb stopping the paralyze, check it. */
-    if (stringp(stop_verb) &&
-	(query_verb() == stop_verb))
+    if (stringp(stop_verb) && (verb == stop_verb))
     {
         /* If a stop_fun is defined, the paralysis STOPS if it returns 0.
 	 * Returning 1 will cause the the paralysis to continue.
@@ -303,6 +320,54 @@ query_stop_message()
 }
 
 /*
+ * Function name: set_talkable
+ * Description  : Set if standard say alias can be used when paralyzed
+ * Arguments    : 1/0 - 1 can talk, 0 cannot talk. Default is 0;
+ */
+void
+set_talkable(int talk)
+{
+	talkable = talk;
+}
+
+/*
+ * Function name: query_talkable
+ * Description  : Returns if player can talk during paralyze
+ * Returns      : int - 1 can talk, 0 cannot talk.
+ */
+int
+query_talkable()
+{
+	return talkable;
+}
+
+/*
+ * Function name: set_allowed_commands
+ * Description  : Set additional commands allowed during paralyze other 
+ *                than those allowed in CMDPARSE_PARALYZE_ALLOWED
+ * Arguments    : mixed array of - extra verbs.
+ */
+void
+set_allowed_commands(mixed verbs)
+{
+    extra_commands = verbs;
+} 
+
+/*
+ * Function name: query_allowed commands
+ * Description  : Returns the additionally allowed commands other than 
+ *                those in CMDPARSE_PARALYZE_ALLOWED
+ * Returns      : mixed - array of additional allowed commands
+                  0 - No additional commands allowed
+				  array of strings - additional allowed commands
+ */
+mixed
+query_allowed_comands()
+{
+    return extra_commands;
+}
+
+/*
  * Function name: set_standard_paralyze
  * Description  : Set up standard settings for a paralyze.
  * Arguments    : string str - When the player uses the stop-verb, 'stop',
@@ -318,6 +383,8 @@ set_standard_paralyze(string str)
     set_stop_message("You stop " + str + ".\n");
     set_fail_message("You are busy with other things right now. You must " +
         "'stop' to do something else.\n");
+	set_talkable(0);
+	set_allowed_commands(0);
 }
 
 /*
@@ -424,6 +491,10 @@ stat_object()
     {
         str += "Stop obj:  " + file_name(stop_object) + "\n";
     }
+	if (talkable)
+	{
+		str += "Normal speech is allowed.\n";
+	}
 
     return str;
 }
